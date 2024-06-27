@@ -40,6 +40,20 @@ CreatedAt (datetime, not null, default current timestamp)
 UpdatedAt (datetime, not null, default current timestamp on update current timestamp)
 
 
+### 📎 Branches :
+
+- main :
+  
+- dev :
+  
+- hotfix :
+
+- release :
+
+- feature-db : Développement lié à la base de données.
+
+- feature-docker : Développement lié au docker.
+
 ### 💻 Applications et langages utilisés :
 
 - C#
