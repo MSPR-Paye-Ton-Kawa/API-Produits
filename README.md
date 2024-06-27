@@ -19,16 +19,24 @@ Cahier des Charges de la MSPR « Conception d’une solution applicative en adé
 
 Ce repos est destiné à l'API Produits.
 
-Table Products
+Table Products :
 
 ProductId (int, Primary Key, Auto-increment)
+
 Name (varchar, not null)
+
 Description (text, null)
+
 Price (decimal, not null)
+
 StockQuantity (int, not null)
+
 CategoryId (int, Foreign Key, not null)
+
 SupplierId (int, Foreign Key, not null)
+
 CreatedAt (datetime, not null, default current timestamp)
+
 UpdatedAt (datetime, not null, default current timestamp on update current timestamp)
 
 
