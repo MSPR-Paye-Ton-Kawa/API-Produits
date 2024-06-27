@@ -41,6 +41,7 @@ namespace API_Produits.Controllers
             return product;
         }
 
+        // PATCH NE MARCHE PAS IL FAUT REGLER L ERREUR
         // PATCH: api/Products/5
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchProduct(int id, [FromBody] JsonPatchDocument<Product> patchDocument)
