@@ -41,26 +41,16 @@ namespace API_Produits.Controllers
             return product;
         }
 
-        // PATCH NE MARCHE PAS IL FAUT REGLER L ERREUR
-        // PATCH: api/Products/5
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchProduct(int id, [FromBody] JsonPatchDocument<Product> patchDocument)
+        // PUT: api/Products/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutProduct(int id, Product product)
         {
-            var product = await _context.Products.FindAsync(id);
-
-            if (product == null)
+            if (id != product.ProductId)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            // Apply the changes from the JSON patch document to the product
-            patchDocument.ApplyTo(product);
-
-            // Validate model state after applying patch
-            if (!TryValidateModel(product))
-            {
-                return BadRequest(ModelState);
-            }
+            _context.Entry(product).State = EntityState.Modified;
 
             try
             {
