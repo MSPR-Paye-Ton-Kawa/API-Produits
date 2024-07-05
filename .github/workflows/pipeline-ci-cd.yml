@@ -41,7 +41,7 @@ jobs:
           dotnet tool install --global dotnet-sonarscanner
           
           # Prepare SonarQube analysis
-          dotnet-sonarscanner begin /d:sonar.organization="mspr-paye-ton-kawa" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet-sonarscanner begin /o:sonar.organization="mspr-paye-ton-kawa" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
           
           # Run SonarQube analysis
           dotnet build --configuration Release
