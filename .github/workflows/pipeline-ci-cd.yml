@@ -28,7 +28,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t api_produits/my-docker-image .
+          docker build -t api_produits:latest ./API_Produits/API_Produits
           docker images
 
       #- name: Test and analyze
