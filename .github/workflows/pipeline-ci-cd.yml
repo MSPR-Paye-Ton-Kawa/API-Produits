@@ -58,7 +58,7 @@ jobs:
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         run: |
           # Example deployment step to staging environment
-          echo "Deploying Docker image to staging environment..."
+          echo "Deploying Docker image to staging environment"
           docker pull "${{ secrets.DOCKERHUB_USERNAME }}/my-docker-image:latest"
           docker stop staging-container || true
           docker rm staging-container || true
