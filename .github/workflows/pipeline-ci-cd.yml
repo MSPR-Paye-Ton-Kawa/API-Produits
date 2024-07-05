@@ -24,17 +24,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v1
 
       - name: Build Docker image
         run: |
           docker build -t api_produits:latest ./API_Produits/API_Produits
           docker images
 
-      #- name: Test and analyze
-       # run: |
+
+      - name: Test and analyze
+        run: |
           # Run tests within the Docker container
-          # docker run my-docker-image dotnet test --no-restore --verbosity normal
+          docker run api_produits dotnet test --no-restore --verbosity normal
           
           # Install SonarScanner for MSBuild
           #dotnet tool install --global dotnet-sonarscanner
@@ -51,8 +52,8 @@ jobs:
       - name: Publish Docker image
         run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-          docker tag my-docker-image "${{ secrets.DOCKERHUB_USERNAME }}/my-docker-image:latest"
-          docker push "${{ secrets.DOCKERHUB_USERNAME }}/my-docker-image:latest"
+          docker tag api_produits "${{ secrets.DOCKERHUB_USERNAME }}/api_produits:latest"
+          docker push "${{ secrets.DOCKERHUB_USERNAME }}/api_produits:latest"
 
       - name: Deploy to staging
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
