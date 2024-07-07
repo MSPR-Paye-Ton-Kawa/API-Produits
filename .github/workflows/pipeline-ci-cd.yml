@@ -45,7 +45,7 @@ jobs:
 
           
           # Run SonarQube analysis
-          dotnet build --configuration Release
+          dotnet build ./API_Produits/API_Produits --configuration Release
           
           # End SonarQube analysis
           dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
