@@ -47,6 +47,8 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+      - name: Complete SonarCloud analysis
+        run: dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Publish Docker image
         run: |
