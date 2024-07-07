@@ -40,11 +40,13 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
-          projectKey: MSPR-Paye-Ton-Kawa_API-Produits
-          organization: mspr-paye-ton-kawa
+          args: >
+            -Dsonar.projectKey=MSPR-Paye-Ton-Kawa_API-Produits
+            -Dsonar.organization=mspr-paye-ton-kawa
+            -Dsonar.host.url=https://sonarcloud.io
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        
+
 
       - name: Publish Docker image
         run: |
