@@ -26,6 +26,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
 
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0.x' 
+
+
       - name: Build Docker image
         run: |
           docker build -t api_produits:latest ./API_Produits/API_Produits
