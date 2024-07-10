@@ -16,7 +16,7 @@ namespace API_Produits.Tests.UnitTests
 
         public ProductsControllerTests()
         {
-            // Configuration du contexte de base de donnÈes en mÈmoire pour les tests
+            // Configuration du contexte de base de donn√©es en m√©moire pour les tests
             _dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
@@ -85,7 +85,6 @@ namespace API_Produits.Tests.UnitTests
                 Assert.Equal(2, products.Count());
             }
         }
-
-        // Ajouter d'autres tests au besoin
+        // Ajouter d'autres tests si n√©cessaire
     }
 }
