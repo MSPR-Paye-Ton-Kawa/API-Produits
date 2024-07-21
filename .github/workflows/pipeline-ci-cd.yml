@@ -65,9 +65,6 @@ jobs:
             -Dsonar.sources="./API_Produits/API_Produits"
        
 
-      - name: Complete SonarCloud analysis
-        run: dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
-
       - name: Deploy to staging
         if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         run: |
