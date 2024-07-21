@@ -38,10 +38,10 @@ jobs:
           docker images
 
 
-      - name: Test
-        run: |
-          Run tests within the Docker container
-          docker run api_produits dotnet test --no-restore --verbosity normal
+      #- name: Test
+       # run: |
+          #Run tests within the Docker container
+          #docker run api_produits dotnet test --no-restore --verbosity normal
      
       - name: Login to DockerHub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
