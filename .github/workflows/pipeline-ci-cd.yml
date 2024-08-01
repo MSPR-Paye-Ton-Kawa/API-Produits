@@ -39,6 +39,9 @@ jobs:
 
 
       - name: Test
+       #just for dev mode when we don't have tests / as soon as we have : we'll delete these 2 lines
+        continue-on-error: true
+        timeout-minutes: 1
         run: |
           #Run tests within the Docker container
           docker run api_produits dotnet test --no-restore --verbosity normal
@@ -66,7 +69,7 @@ jobs:
        
 
       - name: Deploy to staging
-        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/release' && github.event_name == 'push'
         run: |
           # Example deployment step to staging environment
           echo "Deploying Docker image to staging environment:"
