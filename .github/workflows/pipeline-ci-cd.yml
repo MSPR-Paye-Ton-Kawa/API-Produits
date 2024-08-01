@@ -39,8 +39,9 @@ jobs:
 
 
       - name: Test
+       #just for dev mode when we don't have tests / as soon as we have : we'll delete this line
         continue-on-error: true
-        timeout-minutes: 3
+        timeout-minutes: 1
         run: |
           #Run tests within the Docker container
           docker run api_produits dotnet test --no-restore --verbosity normal
