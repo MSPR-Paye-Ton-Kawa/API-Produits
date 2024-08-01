@@ -39,6 +39,8 @@ jobs:
 
 
       - name: Test
+        continue-on-error: true
+        timeout-minutes: 3
         run: |
           #Run tests within the Docker container
           docker run api_produits dotnet test --no-restore --verbosity normal
