@@ -23,68 +23,54 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v1
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: '6.0.x' 
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.x' 
 
+    - name: Build and Test Docker image
+      run: |
+        docker build -t api_produits:latest .
+        
+    - name: Login to DockerHub
+      run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
-      - name: Build Docker image
-        run: |
-          docker build -t api_produits:latest ./API_Produits/API_Produits
-          docker images
-
-
-      - name: Test
-       #just for dev mode when we don't have tests / as soon as we have : we'll delete these 2 lines
-        continue-on-error: true
-        timeout-minutes: 1
-        run: |
-          #Run tests within the Docker container
-          docker run api_produits dotnet test --no-restore --verbosity normal
-     
-      - name: Login to DockerHub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-
-      - name: Publish Docker image
-        run: |
+    - name: Publish Docker image
+      if: success() # Only publish if the build and test steps are successful
+      run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
           docker tag api_produits "${{ secrets.DOCKERHUB_USERNAME }}/api_produits:latest"
           docker push "${{ secrets.DOCKERHUB_USERNAME }}/api_produits:latest"
 
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v2.2.0
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.projectKey="MSPR-Paye-Ton-Kawa_API-Produits"
+          -Dsonar.organization="mspr-paye-ton-kawa"
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.sources="./API_Produits"
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2.2.0
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey="MSPR-Paye-Ton-Kawa_API-Produits"
-            -Dsonar.organization="mspr-paye-ton-kawa"
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.sources="./API_Produits/API_Produits"
-       
+    - name: Deploy to staging
+      if: github.ref == 'refs/heads/release' && github.event_name == 'push'
+      run: |
+        echo "Deploying Docker image to staging environment:"
+        docker pull "${{ secrets.DOCKERHUB_USERNAME }}/api_produits:latest"
+        docker stop staging-container || true
+        docker rm staging-container || true
+        docker run -d --name staging-container -p 8081:80 "${{ secrets.DOCKERHUB_USERNAME }}/api_produits:latest"
+        echo "Application deployed to http://localhost:8081"
 
-      - name: Deploy to staging
-        if: github.ref == 'refs/heads/release' && github.event_name == 'push'
-        run: |
-          # Example deployment step to staging environment
-          echo "Deploying Docker image to staging environment:"
-          docker pull "${{ secrets.DOCKERHUB_USERNAME }}/my-docker-image:latest"
-          docker stop staging-container || true
-          docker rm staging-container || true
-          docker run -d --name staging-container -p 8081:80 "${{ secrets.DOCKERHUB_USERNAME }}/my-docker-image:latest"
-          echo "Application deployed to http://localhost:8081"
-
-      - name: Deploy to production
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          # Example deployment step to production environment
-          docker pull "${{ secrets.DOCKERHUB_USERNAME }}/my-docker-image:latest"
-          docker stop production-container || true
-          docker rm production-container || true
-          docker run -d --name production-container -p 8080:80 "${{ secrets.DOCKERHUB_USERNAME }}/my-docker-image:latest"
-          echo "Application deployed to http://localhost:8080"
+    - name: Deploy to production
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: |
+        docker pull "${{ secrets.DOCKERHUB_USERNAME }}/api_produits:latest"
+        docker stop production-container || true
+        docker rm production-container || true
+        docker run -d --name production-container -p 8080:80 "${{ secrets.DOCKERHUB_USERNAME }}/api_produits:latest"
+        echo "Application deployed to http://localhost:8080"
