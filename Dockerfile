@@ -1,21 +1,35 @@
-# Stage 1: Build
+# Utilisez l'image SDK pour construire, publier, et tester
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
-# Copier le fichier csproj et restaurer les d�pendances
-COPY ["API_Produits.csproj", "."]
-RUN dotnet restore "API_Produits.csproj"
+# Copiez les fichiers de projet
+COPY API_Produits/API_Produits.csproj API_Produits/
+COPY API_Produits.Tests/API_Produits.Tests.csproj API_Produits.Tests/
 
-# Copier tous les fichiers et compiler
+# Restaurer les dépendances
+RUN dotnet restore API_Produits/API_Produits.csproj
+RUN dotnet restore API_Produits.Tests/API_Produits.Tests.csproj
+
+# Copiez tous les fichiers sources
 COPY . .
-RUN dotnet build "API_Produits.csproj" -c Release -o /app/build
 
-# Stage 2: Publish
-FROM build AS publish
-RUN dotnet publish "API_Produits.csproj" -c Release -o /app/publish
+# Construisez les projets
+WORKDIR /src/API_Produits
+RUN dotnet build -c Release -o /app/build
 
-# Stage 3: Final
+WORKDIR /src/API_Produits.Tests
+RUN dotnet build -c Release -o /app/build
+
+# Exécutez les tests
+WORKDIR /src/API_Produits.Tests
+RUN dotnet test --no-restore --verbosity normal
+
+# Publiez le projet API_Produits
+WORKDIR /src/API_Produits
+RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
+
+# Utilisez l'image de base .NET pour ASP.NET Core pour la phase finale
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "API_Produits.dll"]
