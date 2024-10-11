@@ -24,14 +24,22 @@ namespace API_Produits.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+            // Inclure les relations Category et Supplier
+            return await _context.Products
+                                 .Include(p => p.Category)  // Charger la catégorie
+                                 .Include(p => p.Supplier)  // Charger le fournisseur
+                                 .ToListAsync();
         }
 
         // GET: api/Products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            // Inclure les relations Category et Supplier
+            var product = await _context.Products
+                                .Include(p => p.Category)  // Charger la catégorie
+                                .Include(p => p.Supplier)  // Charger le fournisseur
+                                .FirstOrDefaultAsync(p => p.ProductId == id);
 
             if (product == null)
             {
