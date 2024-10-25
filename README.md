@@ -21,55 +21,48 @@ Ce repos est destiné à l'API Produits.
 
 📦 Table Products :
 
-- ProductId (int, Primary Key, Auto-increment)
+- ProductId (int, Primary Key, Auto-increment) : Identifiant unique du produit.
 
-Identifiant unique du produit.
+- Name (varchar, not null) : Nom du produit.
 
-- Name (varchar, not null)
+- Description (text, null) : Description du produit.
 
-Nom du produit.
+- Price (decimal, not null) : Prix du produit.
 
-- Description (text, null)
+- StockQuantity (int, not null) : Quantité en stock.
 
-Description du produit.
+- CategoryId (int, Foreign Key, not null) : Identifiant de la catégorie associée.
 
-Price (decimal, not null)
-Prix du produit.
+- SupplierId (int, Foreign Key, not null) : Identifiant du fournisseur.
 
-StockQuantity (int, not null)
-Quantité en stock.
+- CreatedAt (datetime, not null, default current timestamp) : Date de création du produit.
 
-CategoryId (int, Foreign Key, not null)
-Identifiant de la catégorie associée.
+- UpdatedAt (datetime, not null, default current timestamp on update current timestamp) : Date de la dernière mise à jour du produit.
 
-SupplierId (int, Foreign Key, not null)
-Identifiant du fournisseur.
 
-CreatedAt (datetime, not null, default current timestamp)
-Date de création du produit.
+📦 Table Categories :
 
-UpdatedAt (datetime, not null, default current timestamp on update current timestamp)
-Date de la dernière mise à jour du produit.
+- CategoryId (int, Primary Key, Auto-increment) : Identifiant unique de la catégorie.
 
-Table Categories
-CategoryId (int, Primary Key, Auto-increment)
-Identifiant unique de la catégorie.
+- CategoryName (varchar, not null) : Nom de la catégorie.
 
-CategoryName (varchar, not null)
-Nom de la catégorie.
+- CategoryType (varchar, null) : Type de la catégorie.
 
-CategoryType (varchar, null)
-Type de la catégorie.
 
-Table Suppliers
-SupplierId (int, Primary Key, Auto-increment)
-Identifiant unique du fournisseur.
+📦 Table Suppliers :
 
-SupplierName (varchar, not null)
-Nom du fournisseur.
+- SupplierId (int, Primary Key, Auto-increment) : Identifiant unique du fournisseur.
 
-ContactEmail (varchar, null)
-Email de contact du fournisseur.
+- SupplierName (varchar, not null) : Nom du fournisseur.
+
+- ContactEmail (varchar, null) : Email de contact du fournisseur.
+
+
+Commandes Docker :
+
+docker build -t apiproduits .
+
+docker run -p 8080:80 --name apiproduits apiproduits:latest
 
 
 ### 📎 Branches :
@@ -94,11 +87,14 @@ Email de contact du fournisseur.
 
 - bugfix-* : Correction de bugs.
 
+
 ### 💻 Applications et langages utilisés :
 
 - C#
 - Visual Studio
 - Docker
+
+
 
 ## 🌸 Merci !
 © J-IFT
