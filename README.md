@@ -19,46 +19,82 @@ Cahier des Charges de la MSPR « Conception d’une solution applicative en adé
 
 Ce repos est destiné à l'API Produits.
 
-Table Products :
+📦 Table Products :
 
-ProductId (int, Primary Key, Auto-increment)
+- ProductId (int, Primary Key, Auto-increment) : Identifiant unique du produit.
 
-Name (varchar, not null)
+- Name (varchar, not null) : Nom du produit.
 
-Description (text, null)
+- Description (text, null) : Description du produit.
 
-Price (decimal, not null)
+- Price (decimal, not null) : Prix du produit.
 
-StockQuantity (int, not null)
+- StockQuantity (int, not null) : Quantité en stock.
 
-CategoryId (int, Foreign Key, not null)
+- CategoryId (int, Foreign Key, not null) : Identifiant de la catégorie associée.
 
-SupplierId (int, Foreign Key, not null)
+- SupplierId (int, Foreign Key, not null) : Identifiant du fournisseur.
 
-CreatedAt (datetime, not null, default current timestamp)
+- CreatedAt (datetime, not null, default current timestamp) : Date de création du produit.
 
-UpdatedAt (datetime, not null, default current timestamp on update current timestamp)
+- UpdatedAt (datetime, not null, default current timestamp on update current timestamp) : Date de la dernière mise à jour du produit.
+
+
+📦 Table Categories :
+
+- CategoryId (int, Primary Key, Auto-increment) : Identifiant unique de la catégorie.
+
+- CategoryName (varchar, not null) : Nom de la catégorie.
+
+- CategoryType (varchar, null) : Type de la catégorie.
+
+
+📦 Table Suppliers :
+
+- SupplierId (int, Primary Key, Auto-increment) : Identifiant unique du fournisseur.
+
+- SupplierName (varchar, not null) : Nom du fournisseur.
+
+- ContactEmail (varchar, null) : Email de contact du fournisseur.
+
+
+Commandes Docker :
+
+docker build -t apiproduits .
+
+docker run -p 8080:80 --name apiproduits apiproduits:latest
 
 
 ### 📎 Branches :
 
-- main :
+- main : Solution finale, prod.
   
-- dev :
+- dev : Solution fonctionnelle en dev.
   
-- hotfix :
+- hotfix : Correction de bugs et autres.
 
-- release :
+- release : Solution fonctionnelle de dev à prod.
 
 - feature-db : Développement lié à la base de données.
 
-- feature-docker : Développement lié au docker.
+- feature-tests : Développement des tests.
+
+- feature-owasp-dependency-check : Développement de la partie sécurité.
+
+- feature-broker : Développement de la partie message broker.
+
+- feature-docker : Développement de la partie Docker.
+
+- bugfix-* : Correction de bugs.
+
 
 ### 💻 Applications et langages utilisés :
 
 - C#
 - Visual Studio
 - Docker
+
+
 
 ## 🌸 Merci !
 © J-IFT
