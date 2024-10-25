@@ -19,14 +19,18 @@ Cahier des Charges de la MSPR « Conception d’une solution applicative en adé
 
 Ce repos est destiné à l'API Produits.
 
-Table Products
-ProductId (int, Primary Key, Auto-increment)
+📦 Table Products :
+
+- ProductId (int, Primary Key, Auto-increment)
+
 Identifiant unique du produit.
 
-Name (varchar, not null)
+- Name (varchar, not null)
+
 Nom du produit.
 
-Description (text, null)
+- Description (text, null)
+
 Description du produit.
 
 Price (decimal, not null)
