@@ -34,19 +34,33 @@ public class StockService : IStockService
 
         public async Task<bool> UpdateStockQuantity(int productId, int quantity)
         {
-            var product = await _context.Products.FindAsync(productId);
-
-            if (product == null || product.StockQuantity < quantity)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                return false; 
+                try
+                {
+                    var product = await _context.Products.FindAsync(productId);
+
+                    if (product == null || product.StockQuantity < quantity)
+                    {
+                        return false;
+                    }
+
+                    product.StockQuantity -= quantity;
+
+                    await _context.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    Console.WriteLine($"Error updating stock: {ex.Message}");
+                    return false;
+                }
             }
-
-            product.StockQuantity -= quantity;
-
-            await _context.SaveChangesAsync();
-
-            return true; 
         }
+
 
     }
 }
