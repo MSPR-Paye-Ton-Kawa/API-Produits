@@ -78,7 +78,10 @@ app.UseHttpMetrics();   // Collecte les m�triques HTTP (requ�tes, latence, e
 
 // Always use Swagger in both development and production
 app.UseSwagger();
-app.UseSwaggerUI;
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Produits V1");
+});
 
 app.UseCors("AllowAllOrigins");
 
