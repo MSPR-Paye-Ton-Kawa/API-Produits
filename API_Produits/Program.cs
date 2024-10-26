@@ -89,11 +89,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// D�marrer le consommateur de stock
-using (var scope = app.Services.CreateScope())
-{
-    var stockCheckConsumer = scope.ServiceProvider.GetRequiredService<StockCheckConsumer>();
-    stockCheckConsumer.Start();
-}
-
 app.Run();
