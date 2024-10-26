@@ -65,7 +65,6 @@ public class StockCheckConsumer : IDisposable
             }
         }
 
-
     private async Task ProcessStockCheckRequest(StockCheckRequest request)
     {
         using (var scope = _serviceProvider.CreateScope())
@@ -85,6 +84,17 @@ public class StockCheckConsumer : IDisposable
             }
 
             SendStockCheckResponse(request.RequestId, isStockAvailable);
+
+            // If stock available : update stock
+            if (isStockAvailable)
+            {
+                foreach (var item in request.Items)
+                {
+                    await stockService.UpdateStockQuantity(item.ProductId, item.Quantity);
+                    _logger.LogInformation($"Stock updated for ProductId: {item.ProductId}. Quantity: {item.Quantity}.");
+                }
+            }
+
 
             var response = new StockCheckResponse
             {
