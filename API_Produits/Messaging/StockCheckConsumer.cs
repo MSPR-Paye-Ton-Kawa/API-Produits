@@ -3,12 +3,14 @@ using RabbitMQ.Client.Events;
 using System.Text;
 using System.Text.Json;
 using API_Produits.Services;
+using Prometheus;
 public class StockCheckConsumer : IDisposable
 {
         private readonly IConnection _connection;
         private readonly IModel _channel;
         private readonly ILogger<StockCheckConsumer> _logger;
         private readonly IServiceProvider _serviceProvider;
+    private static readonly Counter _messagesConsumed = Metrics.CreateCounter("stock_check_requests_received", "Total number of Stock Check requests received");
 
     public StockCheckConsumer(IConnection connection, ILogger<StockCheckConsumer> logger, IServiceProvider serviceProvider)
         {
@@ -57,7 +59,9 @@ public class StockCheckConsumer : IDisposable
                 };
 
                 _channel.BasicConsume(queue: "stock_check_request", autoAck: true, consumer: consumer);
-                _logger.LogInformation("Stock check consumer started and attached to queue: stock_check_request");
+
+            _messagesConsumed.Inc();
+            _logger.LogInformation("Stock check consumer started and attached to queue: stock_check_request");
             }
             catch (Exception ex)
             {
